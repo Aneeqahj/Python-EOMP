@@ -5,6 +5,6 @@ root = Tk()
 root.title("Lotto Machine")
 root.resizable("false", "false")
 root.geometry("600x400")
-root.config(bg="lime")
+root.config(bg="#835134")
 
 root.mainloop()
