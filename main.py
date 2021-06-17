@@ -5,22 +5,23 @@ from datetime import *
 import rsaidnumber
 from validate_email import validate_email
 from dateutil.relativedelta import relativedelta
-import uuid
+
 
 root = Tk()
 root.resizable("false", "false")
-root.geometry("600x400")
-root.config(bg="#835134")
-root.title("Lotto Machine")
+root.geometry("600x400") # size of the window
+root.config(bg="#835134") # background colour of the window
+root.title("Lotto Machine") # Title of the window
 
 
-class Info:
-    def __init__(self, root):
-        self.details = Label(root, text="Fill in the details below:", bg="#835134", font=("Arial", 15))
-        self.details.place(x=220, y=20)
+class Info: # created a class called info
+    def __init__(self, root): # defining all the details within the window
+        self.details = Label(root, text="Fill in the details below:", bg="#835134", font=("Arial", 15)) # creating a
+        # label
+        self.details.place(x=220, y=20) # placing the label
         self.name = Label(root, text="Name:", bg="#835134")
         self.name.place(x=100, y=100)
-        self.name_ent = Entry(root)
+        self.name_ent = Entry(root) # creating an entry box for for details to be entered
         self.name_ent.place(x=200, y=100)
         self.email = Label(root, text="Email:", bg="#835134")
         self.email.place(x=100, y=150)
@@ -30,14 +31,16 @@ class Info:
         self.id.place(x=100, y=200)
         self.id_ent = Entry(root)
         self.id_ent.place(x=200, y=200)
-        self.verify = Button(root, text="Verify", bg="#CB9B7C", borderwidth=2, command=self.verify)
+        self.verify = Button(root, text="Verify", bg="white", borderwidth=2, command=self.verify) # creating a button
+        # to verify information that was entered
         self.verify.place(x=100, y=300)
-        self.exit = Button(root, text="Exit", bg="#CB9B7C", borderwidth=2, command=self.exit)
+        self.exit = Button(root, text="Exit", bg="white", borderwidth=2, command=self.exit)
         self.exit.place(x=300, y=300)
-        self.clear = Button(root, text="Clear", bg="#CB9B7C", borderwidth=2, command=self.clear)
+        self.clear = Button(root, text="Clear", bg="white",
+                            borderwidth=2, command=self.clear)
         self.clear.place(x=200, y=300)
 
-    def add_to_file(self, text_to_add):
+    def add_to_file(self, text_to_add): # defining a textfile to store details
         import json
 
         text_to_add = json.dumps(text_to_add)
@@ -45,7 +48,7 @@ class Info:
         with open("Database.txt", "a+") as database_file:
             database_file.write(text_to_add)
 
-    def age(self, id):
+    def age(self, id): # defining age for calculation
         today = date.today()
         dob = id.date_of_birth
         difference = relativedelta(today, dob)
@@ -73,12 +76,15 @@ class Info:
                         id = rsaidnumber.parse(id)
                         id.valid
 
+                        player_id  =  name[:2] + str(id)[:6]
+
                         self.age(id)
                         if int(self.age(id)) >= 18:
                             player = {
                                 "name": name,
                                 "email": email,
-                                "id number": str(id)
+                                "id number": str(id),
+                                "player id": player_id
                             }
                             self.add_to_file(player)
                             messagebox.showinfo("Yay!!", "Let's play")
