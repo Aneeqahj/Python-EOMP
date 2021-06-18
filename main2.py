@@ -3,14 +3,14 @@ from tkinter import messagebox
 
 
 root = Tk()
-root.title("Lotto Machine")
-root.resizable("false", "false")
-root.config(bg="#835134")
-root.geometry("800x400")
+root.title("Lotto Machine") # window title
+root.resizable("false", "false") # cant make the window bigger
+root.config(bg="#835134") # background colour for the window
+root.geometry("800x400") # window size
 
 
-class Lotto:
-    def __init__(self, root):
+class Lotto: # creating a class for lotto generator
+    def __init__(self, root): # defining all labels, entries and buttons
         self.details = Label(root, text="Enter any 6 numbers between 1 and 49:", bg="#835134", font=("Arial", 15))
         self.details.place(x=100, y=20)
         self.number1 = Entry(root, width=5)
@@ -43,20 +43,20 @@ class Lotto:
         self.number12.place(x=600, y=250)
         self.play_again = Button(root, text="Play again", bg="white", borderwidth=2, command=self.playAgain)
         self.play_again.place(x=100, y=300)
-        self.claim = Button(root, text="Claim Prize", bg="white", borderwidth=2, command=self.claim)
+        self.claim = Button(root, text="Claim Prize", bg="white", borderwidth=2, state="disabled", command=self.claim)
         self.claim.place(x=350, y=300)
         self.exit = Button(root, text="Exit", bg="white", borderwidth=2, command=self.exit)
         self.exit.place(x=600, y=300)
 
-    def play(self):
-        import random
+    def play(self): # defining play button
+        import random # importing random to generate random numbers
         numbers = []
         while len(numbers) < 6:
             num = random.randint(1, 49)
-            if num not in numbers:
+            if num not in numbers: # no duplicate numbers
                 numbers.append(num)
-        # return lotto_list
-
+            # configuring state from readonly to normal for lotto entries and clearing initial entries so the numbers
+            # dont add on to the previous numbers
         self.number7.config(state="normal")
         self.number8.config(state="normal")
         self.number9.config(state="normal")
@@ -69,7 +69,7 @@ class Lotto:
         self.number10.delete(0, END)
         self.number11.delete(0, END)
         self.number12.delete(0, END)
-
+        # configuring to normal for lotto entries to show
         self.number7.config(state="normal")
         self.number7.insert(0, numbers[0])
         self.number8.config(state="normal")
@@ -83,7 +83,9 @@ class Lotto:
         self.number12.config(state="normal")
         self.number12.insert(0, numbers[5])
 
-        if self.number1.get() == "" or self.number2.get() == "" or self.number3.get() == "" or self.number4.get() == "" or self.number5.get() == "" or self.number6.get() == "":
+           # creating
+        if self.number1.get() == "" or self.number2.get() == "" or self.number3.get() == "" or self.number4.get() == ""\
+                or self.number5.get() == "" or self.number6.get() == "":
             messagebox.showerror("Empty field", "Fill in all fields")
         else:
             numbers = set(numbers)
@@ -93,14 +95,19 @@ class Lotto:
             win = len(match)
             if win == 2:
                 messagebox.showinfo("YAY", "You win R20.00")
+                self.claim.config(state="normal")
             elif win == 3:
                 messagebox.showinfo("YAY", "You win R100.50")
+                self.claim.config(state="normal")
             elif win == 4:
                 messagebox.showinfo("YAY", "You win R2,384.00")
+                self.claim.config(state="normal")
             elif win == 5:
                 messagebox.showinfo("YAY", "You win R8,584.00")
+                self.claim.config(state="normal")
             elif win == 6:
                 messagebox.showinfo("YAY", "You win R10 000 000.00")
+                self.claim.config(state="normal")
             else:
                 messagebox.showinfo("Unlucky", "Try again")
 
@@ -133,6 +140,7 @@ class Lotto:
         self.number10.delete(0, END)
         self.number11.delete(0, END)
         self.number12.delete(0, END)
+        self.claim.config(state="disabled")
 
 
 obj = Lotto(root)
