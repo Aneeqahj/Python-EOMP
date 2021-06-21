@@ -1,16 +1,15 @@
 from tkinter import *
 from tkinter import messagebox
 
+window = Tk()
+window.title("Lotto Machine")  # window title
+window.resizable("false", "false")  # cant make the window bigger
+window.config(bg="#835134")  # background colour for the window
+window.geometry("800x400")  # window size
 
-root = Tk()
-root.title("Lotto Machine") # window title
-root.resizable("false", "false") # cant make the window bigger
-root.config(bg="#835134") # background colour for the window
-root.geometry("800x400") # window size
 
-
-class Lotto: # creating a class for lotto generator
-    def __init__(self, root): # defining all labels, entries and buttons
+class Lotto:  # creating a class for lotto generator
+    def __init__(self, root):  # defining all labels, entries and buttons
         self.details = Label(root, text="Enter any 6 numbers between 1 and 49:", bg="#835134", font=("Arial", 15))
         self.details.place(x=100, y=20)
         self.number1 = Entry(root, width=5)
@@ -48,15 +47,15 @@ class Lotto: # creating a class for lotto generator
         self.exit = Button(root, text="Exit", bg="white", borderwidth=2, command=self.exit)
         self.exit.place(x=600, y=300)
 
-    def play(self): # defining play button
-        import random # importing random to generate random numbers
+    def play(self):  # defining play button
+        import random  # importing random to generate random numbers
         numbers = []
         while len(numbers) < 6:
             num = random.randint(1, 49)
-            if num not in numbers: # no duplicate numbers
+            if num not in numbers:  # no duplicate numbers
                 numbers.append(num)
             # configuring state from readonly to normal for lotto entries and clearing initial entries so the numbers
-            # dont add on to the previous numbers
+            # don't add on to the previous numbers
         self.number7.config(state="normal")
         self.number8.config(state="normal")
         self.number9.config(state="normal")
@@ -83,17 +82,17 @@ class Lotto: # creating a class for lotto generator
         self.number12.config(state="normal")
         self.number12.insert(0, numbers[5])
 
-           # creating
-        if self.number1.get() == "" or self.number2.get() == "" or self.number3.get() == "" or self.number4.get() == ""\
+        # none of the entry fields can be empty
+        if self.number1.get() == "" or self.number2.get() == "" or self.number3.get() == "" or self.number4.get() == "" \
                 or self.number5.get() == "" or self.number6.get() == "":
             messagebox.showerror("Empty field", "Fill in all fields")
-        else:
+        else:  # if all the entry fields are filled then match it with the random numbers
             numbers = set(numbers)
             entry_numbers = {int(self.number1.get()), int(self.number2.get()), int(self.number3.get()),
                              int(self.number4.get()), int(self.number5.get()), int(self.number6.get())}
             match = numbers.intersection(entry_numbers)
             win = len(match)
-            if win == 2:
+            if win == 2:  # if any of the numbers match you will win a certain amount of money
                 messagebox.showinfo("YAY", "You win R20.00")
                 self.claim.config(state="normal")
             elif win == 3:
@@ -111,10 +110,10 @@ class Lotto: # creating a class for lotto generator
             else:
                 messagebox.showinfo("Unlucky", "Try again")
 
-    def claim(self):
+    def claim(self):  # defining a claim button
         msg_box = messagebox.askquestion("Congratulations", "Are you sure you want to claim?")
         if msg_box == "yes":
-            root.destroy()
+            window.destroy()
             import main3
         else:
             messagebox.showinfo("Return", "You will now return")
@@ -123,11 +122,11 @@ class Lotto: # creating a class for lotto generator
         msg_box = messagebox.askquestion("Exit Application", "Are you sure you want to exit the application",
                                          icon='warning')
         if msg_box == "yes":
-            root.destroy()
+            window.destroy()
         else:
             messagebox.showinfo("Return", "You will now return to the App", icon="warning")
 
-    def playAgain(self):
+    def playAgain(self):  # once play again is clicked all entries will clear
         self.number1.delete(0, END)
         self.number2.delete(0, END)
         self.number3.delete(0, END)
@@ -143,5 +142,5 @@ class Lotto: # creating a class for lotto generator
         self.claim.config(state="disabled")
 
 
-obj = Lotto(root)
-root.mainloop()
+obj = Lotto(window)
+window.mainloop()

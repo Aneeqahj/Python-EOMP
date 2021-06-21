@@ -1,20 +1,21 @@
 import json
+import ssl
 from tkinter import *
 from tkinter import messagebox
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-root = Tk()
-root.title("Lotto Machine")
-root.config(bg="#835134")
-root.resizable("false", "false")
-root.geometry("600x400")
-variable = StringVar(root)
+window = Tk()
+window.title("Lotto Machine")  # window title
+window.config(bg="#835134")  # window background
+window.resizable("false", "false")  # so you cant make the window bigger
+window.geometry("600x400")  # window size
+variable = StringVar(window)  # for options menu
 
 
 class Details:
-    variable.set("Select")
+    variable.set("Select")  # options menu
 
     def __init__(self, root):
         self.congrats = Label(root, text="Congratulations! Enter details:", bg="#835134", font=("Arial", 15))
@@ -44,16 +45,16 @@ class Details:
     def enter(self):
         acc = self.acc_ent.get()
         bank = self.bank_ent.get()
-        with open("Database.txt", "r", encoding="utf-8-sig", errors="ignore") as file:
+        with open("Database.txt", "r", encoding="utf-8-sig", errors="ignore") as file:  # to pull information from
+            # textfile
             info = json.load(file, strict=False)
             print(info)
 
-
         try:
-            list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+            num_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
             if acc == "":
                 raise ValueError
-            elif acc in list:
+            elif acc in num_list:
                 raise ValueError
             if bank == "":
                 raise ValueError
@@ -62,26 +63,49 @@ class Details:
                 messagebox.showinfo("COOL!", "Details are correct")
             if variable.get() == "Select":
                 raise ValueError
-            elif variable.get() == "FNB":
-                messagebox.showinfo("COOL!", "Details are correct")
-            elif variable.get() == "Absa":
-                messagebox.showinfo("COOL!", "Details are correct")
-            elif variable.get() == "Nedbank":
-                messagebox.showinfo("COOL!", "Details are correct")
-            elif variable.get() == "Standard bank":
-                messagebox.showinfo("COOL!", "Details are correct")
+            else:
+                self.email()
+            # elif variable.get() == "FNB":
+            #     messagebox.showinfo("COOL!", "Details are correct")
+            # elif variable.get() == "Absa":
+            #     messagebox.showinfo("COOL!", "Details are correct")
+            # elif variable.get() == "Nedbank":
+            #     messagebox.showinfo("COOL!", "Details are correct")
+            # elif variable.get() == "Standard bank":
+            #     messagebox.showinfo("COOL!", "Details are correct")
         except ValueError:
             messagebox.showerror("ERROR", "Enter all fields")
 
-    def email(self, json):
-        with open ("Database.txt", "r", encoding="utf-8-sig", errors="ignore") as file:
+    def email(self):
+        import json
+        with open("Database.txt", "r", encoding="utf-8-sig", errors="ignore") as file:
             info = json.load(file, strict=False)
-            print(info)
+            name = info["name"]
+            sender_email = "aneeqahlotto@gmail.com"
+            receiver_email = info["email"]
+            print(receiver_email)
+            password = "lotto2021"
+
+            message = MIMEMultipart("alternative")
+            message["Subject"] = "Lotto Winner"
+            message["From"] = sender_email
+            message["To"] = ", ".join(receiver_email)
+
+            email_message = "Hi " + name + " you have won " + " with lotto " + "it will be transferred to your bank " \
+                                                                               "account" \
+                            + " soon " + "\n" + "\n" + \
+                            "Thanks for playing"
+            text = MIMEText(email_message)
+            message.attach(text)
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+                server.login(sender_email, password)
+                server.sendmail(sender_email, receiver_email, message.as_string())
 
     def convert(self):
         msg_box = messagebox.askquestion("Convert?", "You sure you want to covert?")
         if msg_box == "yes":
-            root.destroy()
+            window.destroy()
             import main4
         else:
             messagebox.showinfo("Return", "You will now return.")
@@ -90,10 +114,10 @@ class Details:
         msg_box = messagebox.askquestion("Exit Application", "Are you sure you want to exit the application",
                                          icon='warning')
         if msg_box == "yes":
-            root.destroy()
+            window.destroy()
         else:
             messagebox.showinfo("Return", "You will now return to the App", icon="warning")
 
 
-obj = Details(root)
-root.mainloop()
+obj = Details(window)
+window.mainloop()
