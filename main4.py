@@ -5,7 +5,7 @@ from tkinter import messagebox
 root = Tk()
 root.title("Lotto Machine")
 root.resizable("false", "false")
-root.geometry("600x400")
+root.geometry("600x500")
 root.config(bg="#835134")
 
 # All the imports
@@ -52,7 +52,6 @@ convert_label.pack()
 
 def convert_curr():
     num = float(value_entry.get())
-    print(information_json['conversion_rates'][convert_list.get(ACTIVE)])
     ans = num * information_json['conversion_rates'][convert_list.get(ACTIVE)]
     convert_label['text'] = round(ans, 2)
 
@@ -73,6 +72,20 @@ def exit():
 
 exit_btn = Button(root, command=exit, text="Exit", borderwidth=2, bg="white", width=20)
 exit_btn.place(x=205, y=350)
+
+
+def back():
+    msg_box = messagebox.askquestion("Return", "You will now return to bank details")
+
+    if msg_box == "yes":
+        root.destroy()
+        import main3
+    else:
+        messagebox.showinfo("Return", "You will remain on this page")
+
+
+back_btn = Button(root, command=back, text="Back", borderwidth=2, bg="white", width=20)
+back_btn.place(x=205, y=410)
 
 root.mainloop()
 root.mainloop()
